@@ -39,9 +39,21 @@ A Django-based Book Sales and Ratings Management System built using a Kaggle CSV
 ## Project Structure
 
 ```text
-mysite/
+django-books-CRUD/
 ├── manage.py
 ├── requirements.txt
 ├── Books_Data_Clean-selected-columns.csv
-├── mysite/
-└── books/
+├── books/
+│   ├── management/
+│   ├── migrations/
+│   ├── templates/
+│   ├── admin.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
+└── mysite/
+    ├── settings.py
+    ├── urls.py
+    ├── asgi.py
+    └── wsgi.py
