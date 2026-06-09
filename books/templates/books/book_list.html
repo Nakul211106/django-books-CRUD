@@ -1,0 +1,167 @@
+{% extends "books/base.html" %}
+
+{% block title %}
+Book Dataset
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Book Sales and Ratings Dataset</h1>
+
+    <p>
+        Manage books imported from the Kaggle dataset using
+        Create, Read, Update and Delete operations.
+    </p>
+
+    <a class="button" href="{% url 'book_create' %}">
+        Add New Book
+    </a>
+</div>
+
+<div class="card">
+    <h2>Search and Filter</h2>
+
+    <form class="search-form" method="GET">
+        <div>
+            <label for="q">Search</label>
+            <input
+                id="q"
+                type="text"
+                name="q"
+                value="{{ query }}"
+                placeholder="Book, author or language"
+            >
+        </div>
+
+        <div>
+            <label for="genre">Genre</label>
+            <select id="genre" name="genre">
+                <option value="">All genres</option>
+
+                {% for item in genres %}
+                    <option
+                        value="{{ item }}"
+                        {% if selected_genre == item %}selected{% endif %}
+                    >
+                        {{ item }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="author_rating">Author rating</label>
+            <select id="author_rating" name="author_rating">
+                <option value="">All ratings</option>
+
+                {% for value, label in author_rating_choices %}
+                    <option
+                        value="{{ value }}"
+                        {% if selected_author_rating == value %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button class="button" type="submit">
+            Search
+        </button>
+    </form>
+
+    <a href="{% url 'book_list' %}">
+        Clear filters
+    </a>
+</div>
+
+<p class="pagination-note">
+    Number of matching books: {{ books|length }}
+</p>
+
+<div style="overflow-x: auto;">
+    <table>
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Year</th>
+                <th>Language</th>
+                <th>Author Rating</th>
+                <th>Book Rating</th>
+                <th>Ratings Count</th>
+                <th>Genre</th>
+                <th>Gross Sales</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.kaggle_index }}</td>
+
+                    <td>
+                        <a href="{% url 'book_detail' book.pk %}">
+                            {{ book.book_name }}
+                        </a>
+                    </td>
+
+                    <td>{{ book.author }}</td>
+
+                    <td>
+                        {% if book.publishing_year %}
+                            {{ book.publishing_year }}
+                        {% else %}
+                            Unknown
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {{ book.language_code|default:"Unknown" }}
+                    </td>
+
+                    <td>{{ book.author_rating }}</td>
+
+                    <td>
+                        {{ book.book_average_rating|floatformat:2 }}
+                    </td>
+
+                    <td>{{ book.book_ratings_count }}</td>
+
+                    <td>{{ book.genre }}</td>
+
+                    <td>
+                        {{ book.gross_sales|floatformat:2 }}
+                    </td>
+
+                    <td class="actions">
+                        <a
+                            class="button button-edit"
+                            href="{% url 'book_update' book.pk %}"
+                        >
+                            Edit
+                        </a>
+
+                        <a
+                            class="button button-delete"
+                            href="{% url 'book_delete' book.pk %}"
+                        >
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="11">
+                        No books found.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

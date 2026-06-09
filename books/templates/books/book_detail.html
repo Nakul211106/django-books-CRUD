@@ -1,0 +1,82 @@
+{% extends "books/base.html" %}
+
+{% block title %}
+{{ book.book_name }}
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ book.book_name }}</h1>
+
+    <p>
+        <strong>Dataset index:</strong>
+        {{ book.kaggle_index }}
+    </p>
+
+    <p>
+        <strong>Publishing year:</strong>
+
+        {% if book.publishing_year %}
+            {{ book.publishing_year }}
+        {% else %}
+            Unknown
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Author:</strong>
+        {{ book.author }}
+    </p>
+
+    <p>
+        <strong>Language code:</strong>
+        {{ book.language_code|default:"Unknown" }}
+    </p>
+
+    <p>
+        <strong>Author rating:</strong>
+        {{ book.author_rating }}
+    </p>
+
+    <p>
+        <strong>Book average rating:</strong>
+        {{ book.book_average_rating|floatformat:2 }}
+    </p>
+
+    <p>
+        <strong>Number of ratings:</strong>
+        {{ book.book_ratings_count }}
+    </p>
+
+    <p>
+        <strong>Genre:</strong>
+        {{ book.genre }}
+    </p>
+
+    <p>
+        <strong>Gross sales:</strong>
+        {{ book.gross_sales|floatformat:2 }}
+    </p>
+
+    <a
+        class="button button-edit"
+        href="{% url 'book_update' book.pk %}"
+    >
+        Edit
+    </a>
+
+    <a
+        class="button button-delete"
+        href="{% url 'book_delete' book.pk %}"
+    >
+        Delete
+    </a>
+
+    <a
+        class="button button-secondary"
+        href="{% url 'book_list' %}"
+    >
+        Back
+    </a>
+</div>
+{% endblock %}
